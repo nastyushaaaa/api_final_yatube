@@ -1,4 +1,3 @@
-# TODO:  Напишите свой вариант
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
@@ -24,11 +23,6 @@ class PostViewSet(ModelViewSet):
     permission_classes = (OwnerOrReadOnly,)
     pagination_class = LimitOffsetPagination
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (ReadOnly(),)
-        return super().get_permissions()
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -43,11 +37,6 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (OwnerOrReadOnly,)
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (ReadOnly(),)
-        return super().get_permissions()
-
     def get_post(self):
         return get_object_or_404(Post, pk=self.kwargs.get('post_id'))
 
@@ -59,28 +48,13 @@ class CommentViewSet(ModelViewSet):
 
 
 class FollowViewSet(ModelViewSet):
-    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username',)
 
     def get_queryset(self):
-        new_queryset = Follow.objects.filter(user=self.request.user)
-        return new_queryset
+        return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        following_username = self.request.data.get("following")
-        following = get_object_or_404(User, username=following_username)
-
-        if self.request.user == following:
-            raise ValidationError("Нельзя подписаться на самого себя.")
-
-        condition = Follow.objects.filter(
-            user=self.request.user, following=following
-        ).exists()
-
-        if condition:
-            raise ValidationError("Вы уже подписаны на этого пользователя.")
-
-        return serializer.save(user=self.request.user, following=following)
+        serializer.save(user=self.request.user)
