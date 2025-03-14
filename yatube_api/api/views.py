@@ -4,17 +4,17 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
     IsAuthenticated
 )
-from rest_framework.exceptions import ValidationError
+# from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import filters
-from posts.models import Follow, Group, Post, User
+# from posts.models import Follow, Group, Post, User
 from .serializers import (
     PostSerializer,
     CommentSerializer,
     GroupSerializer,
     FollowSerializer
 )
-from .permissions import OwnerOrReadOnly, ReadOnly
+# from .permissions import OwnerOrReadOnly, ReadOnly
 
 
 class PostViewSet(ModelViewSet):
