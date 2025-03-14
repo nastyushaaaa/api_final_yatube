@@ -16,6 +16,7 @@ from .serializers import (
     FollowSerializer
 )
 # from .permissions import OwnerOrReadOnly, ReadOnly
+from .permissions import OwnerOrReadOnly
 
 
 class PostViewSet(ModelViewSet):
