@@ -7,6 +7,7 @@ from rest_framework.permissions import (
 # from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import filters
+from posts.models import Follow, Group, Post
 # from posts.models import Follow, Group, Post, User
 from .serializers import (
     PostSerializer,
